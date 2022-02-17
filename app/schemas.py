@@ -10,7 +10,7 @@ class UrlRetrieve(BaseModel):
     long: str
     short: str
     created: datetime
-    last_clicked: datetime
+    last_clicked: Optional[datetime]
     click_count: int
     user_id: Optional[int] = None
 
