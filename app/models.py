@@ -29,5 +29,6 @@ class Visit(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     client_host = Column(String)
     headers = Column(String)
+    cookies = Column(String)
     time = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     url_id = Column(Integer, ForeignKey('urls.id', ondelete='CASCADE'), nullable=False)
