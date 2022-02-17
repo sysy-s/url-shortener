@@ -6,6 +6,7 @@ import validators
 from fastapi.responses import RedirectResponse, JSONResponse
 import time
 from sqlalchemy.orm import Session
+import requests
 
 from .. import models, schemas, utils, oauth2
 from ..database import get_db
@@ -98,6 +99,7 @@ def redirect_short_url(request: Request, short: str, db: Session = Depends(get_d
     Redirects user to long url via db matching, if url given doesn't exist returns exception.
     Adds one to click count and get request headers and stores them in the visits table.
     """
+    
 
     url_query = db.query(models.Url).filter(models.Url.short==short)
     url = url_query.first()
@@ -108,11 +110,14 @@ def redirect_short_url(request: Request, short: str, db: Session = Depends(get_d
     url_query.update({"click_count": url.click_count+1, "last_clicked": sqlalchemy.func.now()}, synchronize_session=False)
     db.commit()
 
+    session = requests.Session()
+    session.get(url.long)
+
     # Creates new visit log, and stores request data in db, also updates click count for url
     client_host = str(request.client.host)
     request_headers = str(request.headers)
 
-    visit_dict = {"url_id": url.id, "client_host": client_host, "headers": request_headers}
+    visit_dict = {"url_id": url.id, "client_host": client_host, "headers": request_headers, "cookies": str(session.cookies.get_dict())}
     new_visit = models.Visit(**visit_dict)
     db.add(new_visit)
     db.commit()
