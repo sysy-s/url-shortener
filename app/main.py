@@ -20,6 +20,7 @@ app = FastAPI(
     description=description
 )
 
+
 origins = ["*"]
 
 app.add_middleware(

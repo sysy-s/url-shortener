@@ -4,3 +4,6 @@ env/
 ideas.py
 static/
 templates/
+calc/
+tests/
+.pytest_cache/
