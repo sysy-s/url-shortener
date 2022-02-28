@@ -45,8 +45,10 @@ class UserBase(BaseModel):
     email: EmailStr
     password: str
 
-class UserCreate(UserBase):
-    pass
+class UserCreate(BaseModel):
+    email: EmailStr
+    password1: str
+    password2: str
 
 class UserLogin(UserBase):
     pass
