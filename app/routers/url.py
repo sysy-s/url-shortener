@@ -27,7 +27,7 @@ def post_long_url(
 
     if not validators.url(url_dict['long']):
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail='Invalid url')
+            status_code=status.HTTP_409_CONFLICT, detail='Invalid URL')
 
     while True:
         url_dict['short'] = utils.rand_str_gen(6)
