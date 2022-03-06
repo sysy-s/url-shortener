@@ -27,7 +27,6 @@ class Visit(Base):
     __tablename__ = 'visits'
 
     id = Column(Integer, primary_key=True, nullable=False)
-    client_host = Column(String)
     headers = Column(String)
     cookies = Column(String)
     time = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))

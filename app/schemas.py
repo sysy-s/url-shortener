@@ -1,3 +1,4 @@
+from re import S
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
@@ -69,8 +70,6 @@ class TokenData(BaseModel):
     id: Optional[str] = None
 
 class Visit(BaseModel):
-    client_host: str
+    cookies: str
     headers: str
-
-    class Config:
-        orm_mode = True
+    time: datetime

@@ -90,7 +90,7 @@ def redirect_short_url(request: Request, short: str, db: Session = Depends(get_d
     if url is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Url {short} was not found")
-
+    # Creates new visit log, and stores request data in db, also updates click count for url
     url_query.update({"click_count": url.click_count+1,
                      "last_clicked": sqlalchemy.func.now()}, synchronize_session=False)
     db.commit()
@@ -98,12 +98,8 @@ def redirect_short_url(request: Request, short: str, db: Session = Depends(get_d
     session = requests.Session()
     session.get(url.long)
 
-    # Creates new visit log, and stores request data in db, also updates click count for url
-    client_host = str(request.client.host)
-    request_headers = str(request.headers)
-
-    visit_dict = {"url_id": url.id, "client_host": client_host,
-                  "headers": request_headers, "cookies": str(session.cookies.get_dict())}
+    visit_dict = {"url_id": url.id,
+                  "headers": str(request.headers), "cookies": str(session.cookies.get_dict())}
     new_visit = models.Visit(**visit_dict)
     db.add(new_visit)
     db.commit()
